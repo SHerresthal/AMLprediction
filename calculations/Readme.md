@@ -11,7 +11,7 @@ docker run -v /e/Stefanie/Classifier/Scripts_github:/dats/scripts -it sherrestha
 ```
 Within the container, you can start an R-session by typing `R` and then run the scripts interactively. 
 
-## main_predictions.R:
+## main_predictions.Rmd:
 
 This script calculates the main prediction results for figures 2, 4 and S2-S7 and S10-12. 
 The output is written in the results folder with the following subfolders: 
