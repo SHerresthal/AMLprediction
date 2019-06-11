@@ -1,0 +1,628 @@
+---
+title: "Figures of manuscript *scalable diagnosis of acute myeloid leukemia using high-dimensional machine learning and blood transcriptomics*"
+author: "Stefanie Warnat-Herresthal"
+output: 
+  html_document: 
+    toc: true
+    toc_float: true
+    theme: united
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(ggplot2)
+```
+
+Loading data
+
+```{r}
+result <- read.delim("../results/results_summary.txt", sep = "\t")
+```
+
+
+# Main figures
+## Figure 2 B: Dataset 1, all samples
+Random Sampling vs. Cross-study sampling
+```{r}
+dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 1 & 
+                result$samples == "all" &
+                result$setting %in% c("random_sampling","cross-study-sampling"),]
+
+# mean for between 1000 and 2000
+dat$size.ts.mean <- dat$size.ts
+dat$size.ts.mean[which(dat$setting == "cross-study-sampling" & dat$size.ts > 1000 & dat$size.ts <= 2000)] <- mean(dat$size.ts[which(dat$setting == "cross-study-sampling" & dat$size.ts > 1000 & dat$size.ts <= 2000)])
+
+# maximum value: 
+
+mean(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 1 & 
+                result$samples == "all" &
+                result$setting == "random_sampling" &
+         result$classifier == "LASSO" &
+         result$size.ts == 2000,]$value)
+
+ggplot(dat[dat$measure %in% c("ACC") & 
+              dat$classifier == "LASSO" & 
+              dat$setting %in% c("random_sampling", "cross-study-sampling") &
+              dat$dataset == 1 &
+              dat$samples == "all",], 
+       aes(x = size.ts.mean, y = value, color = setting)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.5, 1), xlim = c(0, 2000)) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Figure 2 B: Random sampling vs. cross-study sampling, Dataset 1, all samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Fig2B.pdf", height = 4, width = 6)
+
+```
+
+## Figure 2 C: Dataset 1, leukemia samples
+Random Sampling vs. Cross-study sampling
+```{r}
+
+mean(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 1 & 
+                result$samples == "leukemia" &
+                result$setting == "random_sampling" &
+         result$classifier == "LASSO" &
+         result$size.ts == 1741,]$value)
+
+
+dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 1 & 
+                result$samples == "leukemia" &
+                result$setting %in% c("random_sampling","cross-study-sampling"),]
+
+
+# mean for between 1000 and 2000
+dat$size.ts.mean <- dat$size.ts
+dat$size.ts.mean[which(dat$setting == "cross-study-sampling" & dat$size.ts > 1000 & dat$size.ts <= 2000)] <- mean(dat$size.ts[which(dat$setting == "cross-study-sampling" & dat$size.ts > 1000 & dat$size.ts <= 2000)])
+
+ggplot(dat[dat$measure %in% c("ACC") & 
+              dat$classifier == "LASSO" & 
+              dat$setting %in% c("random_sampling", "cross-study-sampling") &
+              dat$dataset == 1 &
+              dat$samples == "leukemia",], 
+       aes(x = size.ts.mean, y = value, color = setting)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.5, 1), xlim = c(0, 2000)) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Figure 2 C Dataset 1, leukemia samples")
+
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Fig2C.pdf", height = 4, width = 6)
+
+```
+## Figure 2 D: Dataset 2, all samples
+Random Sampling vs. Cross-study sampling
+```{r}
+
+mean(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 2 & 
+                result$samples == "all" &
+                result$setting == "random_sampling" &
+         result$classifier == "LASSO" &
+         result$size.ts == 6679,]$value)
+
+
+
+dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 2 & 
+                result$samples == "all" &
+                result$setting %in% c("random_sampling","cross-study-sampling"),]
+
+# mean for between 1000 and 2000
+dat$size.ts.mean <- dat$size.ts
+dat$size.ts.mean[which(dat$setting == "cross-study-sampling" & dat$size.ts > 4000 & dat$size.ts <= 6000)] <- mean(dat$size.ts[which(dat$setting == "cross-study-sampling" & dat$size.ts > 4000 & dat$size.ts <= 6000)])
+
+
+ggplot(dat[dat$measure %in% c("ACC") & 
+              dat$classifier == "LASSO" & 
+              dat$setting %in% c("random_sampling", "cross-study-sampling") &
+              dat$dataset == 2 &
+              dat$samples == "all",], 
+       aes(x = size.ts.mean, y = value, color = setting)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Figure 2 D, DS2, all samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Fig2D.pdf", height = 4, width = 6)
+
+```
+
+## Figure 2 E: Dataset 2, leukemia samples
+Random Sampling vs. Cross-study sampling
+```{r}
+
+mean(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 2 & 
+                result$samples == "leukemia" &
+                result$setting == "random_sampling" &
+         result$classifier == "LASSO" &
+         result$size.ts == 2000,]$value)
+
+
+
+
+
+dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 2 & 
+                result$samples == "leukemia" &
+                result$setting %in% c("random_sampling","cross-study-sampling"),]
+
+# mean for between 1000 and 2000
+dat$size.ts.mean <- dat$size.ts
+dat$size.ts.mean[which(dat$setting == "cross-study-sampling" & dat$size.ts > 1000 & dat$size.ts <= 2000)] <- mean(dat$size.ts[which(dat$setting == "cross-study-sampling" & dat$size.ts > 1000 & dat$size.ts <= 2000)])
+
+ggplot(dat[dat$measure %in% c("ACC") & 
+              dat$classifier == "LASSO" & 
+              dat$setting %in% c("random_sampling", "cross-study-sampling") &
+              dat$dataset == 2 &
+              dat$samples == "leukemia",], 
+       aes(x = size.ts.mean, y = value, color = setting)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Figure 2 E, DS2, leukemia samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Fig2E.pdf", height = 4, width = 6)
+
+```
+## Figure 2 F: Dataset 3, all samples
+Random Sampling vs. Cross-study sampling
+```{r}
+mean(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 3 & 
+                result$samples == "all" &
+                result$setting == "random_sampling" &
+         result$classifier == "LASSO" &
+         result$size.ts == 945,]$value)
+
+
+
+
+dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 3 & 
+                result$samples == "all" &
+                result$setting %in% c("random_sampling","cross-study-sampling"),]
+
+# mean for between 1000 and 2000
+dat$size.ts.mean <- dat$size.ts
+dat$size.ts.mean[which(dat$setting == "cross-study-sampling" & dat$size.ts > 500 & dat$size.ts <= 1000)] <- mean(dat$size.ts[which(dat$setting == "cross-study-sampling" & dat$size.ts > 500 & dat$size.ts <= 1000)])
+
+ggplot(dat[dat$measure %in% c("ACC") & 
+              dat$classifier == "LASSO" & 
+              dat$setting %in% c("random_sampling", "cross-study-sampling") &
+              dat$dataset == 3 &
+              dat$samples == "all",], 
+       aes(x = size.ts.mean, y = value, color = setting)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Figure 2 F, DS3, all samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Fig2F.pdf", height = 4, width = 6)
+
+```
+
+## Figure 3: PPV
+
+
+
+## Figure 4
+```{r}
+ggplot(result[result$measure %in% c("ACC") & 
+              result$classifier == "LASSO" & 
+              result$setting %in% c("cross-platform-sampling"),],
+       aes(x = size.ts, y = value, color = setting)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  facet_grid(dataset~samples) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Figure 2 F, DS3, all samples")
+# ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Fig2F.pdf", height = 4, width = 6)
+
+```
+
+# Supplementary Figures 
+## Random sampling, Dataset 1, all samples
+
+```{r}
+library(ggplot2)
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 1 & 
+                result$samples == "all" &
+                result$setting == "random_sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  
+  
+#  geom_smooth(aes(group = measure)) + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Dataset 1 random sampling, all samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Randomsampling_all_DS1.pdf", height = 4, width = 6)
+
+```
+
+## Random sampling, Dataset 1, leukemia samples
+
+```{r}
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 1 & 
+                result$samples == "leukemia" &
+                result$setting == "random_sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Dataset 1 random sampling, all samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Randomsampling_leukemia_DS1.pdf", height = 4, width = 6)
+```
+
+## Random sampling, Dataset 2, all samples
+
+```{r}
+library(ggplot2)
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 2 & 
+                result$samples == "all" &
+                result$setting == "random_sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  
+  
+#  geom_smooth(aes(group = measure)) + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Dataset 2 random sampling, all samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Randomsampling_all_DS2.pdf", height = 4, width = 6)
+```
+
+
+## Random sampling, Dataset 2, leukemia samples
+
+```{r}
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 2 & 
+                result$samples == "leukemia" &
+                result$setting == "random_sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  
+  
+#  geom_smooth(aes(group = measure)) + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Dataset 2 random sampling, leukemia samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Randomsampling_leukemia_DS2.pdf", height = 4, width = 6)
+```
+
+
+## Random sampling, Dataset 3, all samples (WAIT FOR LDA!)
+
+```{r}
+
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 3 & 
+                result$samples == "all" &
+                result$setting == "random_sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") +
+  #geom_point() + 
+  
+  
+#  geom_smooth(aes(group = measure)) + 
+# coord_cartesian(ylim = c(0.2, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Dataset 3 random sampling, all samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Randomsampling_all_DS3.pdf", height = 4, width = 6)
+```
+
+
+
+## Cross-study sampling, Dataset 1, all samples
+
+```{r}
+
+# give mean training set size: 
+dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 1 & 
+                result$samples == "all" &
+                result$setting == "cross-study-sampling",]
+
+# mean for between 1000 and 2000
+dat$size.ts.mean <- dat$size.ts
+dat$size.ts.mean[which(dat$size.ts > 1000 & dat$size.ts <= 2000)] <- mean(dat$size.ts[which(dat$size.ts > 1000 & dat$size.ts <= 2000)])
+
+ggplot(dat[dat$measure %in% c("ACC", "SENS", "SPEC") & 
+                dat$dataset == 1 & 
+                dat$samples == "all" &
+                dat$setting == "cross-study-sampling",], 
+       aes(x = size.ts.mean, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  facet_wrap(~classifier, nrow = 3) + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Dataset 1 cross-study sampling, all samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Study-sampling_all_DS1.pdf", height = 4, width = 6)
+
+```
+
+
+## Cross-study sampling, Dataset 1, leukemia samples
+
+```{r}
+
+# give mean training set size: 
+dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 1 & 
+                result$samples == "leukemia" &
+                result$setting == "cross-study-sampling",]
+
+# mean for between 1000 and 1500
+dat$size.ts.mean <- dat$size.ts
+dat$size.ts.mean[which(dat$size.ts > 1000 & dat$size.ts <= 2000)] <- mean(dat$size.ts[which(dat$size.ts > 1000 & dat$size.ts <= 2000)])
+
+ggplot(dat[dat$measure %in% c("ACC", "SENS", "SPEC") & 
+                dat$dataset == 1 & 
+                dat$samples == "leukemia" &
+                dat$setting == "cross-study-sampling",], 
+       aes(x = size.ts.mean, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Dataset 1 cross-study sampling, leukemia samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Study-sampling_leukemia_DS1.pdf", height = 4, width = 6)
+
+```
+
+
+## Cross-study sampling, Dataset 2, all samples
+
+```{r}
+dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 2 & 
+                result$samples == "all" &
+                result$setting %in% c("cross-study-sampling"),]
+
+# mean for between 1000 and 2000
+dat$size.ts.mean <- dat$size.ts
+dat$size.ts.mean[which(dat$setting == "cross-study-sampling" & dat$size.ts > 4000 & dat$size.ts <= 6000)] <- mean(dat$size.ts[which(dat$setting == "cross-study-sampling" & dat$size.ts > 4000 & dat$size.ts <= 6000)])
+
+
+ggplot(dat[dat$measure %in% c("ACC", "SENS", "SPEC") & 
+                dat$dataset == 2 & 
+                dat$samples == "all" &
+                dat$setting == "cross-study-sampling",], 
+       aes(x = size.ts.mean, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Dataset 2 cross-study sampling, all samples")
+
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Study-sampling_all_DS2.pdf", height = 4, width = 6)
+
+```
+
+
+## Cross-study sampling, Dataset 2, leukemia samples
+
+```{r}
+
+dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 2 & 
+                result$samples == "leukemia" &
+                result$setting == "cross-study-sampling",]
+
+
+# mean for between 1000 and 2000
+dat$size.ts.mean <- dat$size.ts
+dat$size.ts.mean[which(dat$size.ts > 1000 & dat$size.ts <= 2000)] <- mean(dat$size.ts[which(dat$size.ts > 1000 & dat$size.ts <= 2000)])
+
+
+ggplot(dat[dat$measure %in% c("ACC", "SENS", "SPEC") & 
+                dat$dataset == 2 & 
+                dat$samples == "leukemia" &
+                dat$setting == "cross-study-sampling",], 
+       aes(x = size.ts.mean, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.5, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Dataset 2 cross-study sampling, leukemia samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Study-sampling_leukemia_DS2.pdf", height = 4, width = 6)
+
+```
+## Cross-study sampling, Dataset 3, leukemia samples
+
+```{r}
+dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == 3 & 
+                result$samples == "all" &
+                result$setting == "cross-study-sampling",]
+
+# mean for between 1000 and 1500
+dat$size.ts.mean <- dat$size.ts
+dat$size.ts.mean[which(dat$size.ts > 500 & dat$size.ts <= 1000)] <- mean(dat$size.ts[which(dat$size.ts > 500 & dat$size.ts <= 1000)])
+
+
+ggplot(dat[dat$measure %in% c("ACC", "SENS", "SPEC") & 
+                dat$dataset == 3 & 
+                dat$samples == "all" &
+                dat$setting == "cross-study-sampling",], 
+       aes(x = size.ts.mean, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.0, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Dataset 3 cross-study sampling, all samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Study-sampling_all_DS3.pdf", height = 4, width = 6)
+
+```
+
+## Cross-platform sampling, TS Dataset 1, VS Dataset 2, raw samples
+
+```{r}
+
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == "1_2" & 
+                result$samples == "raw" &
+                result$setting == "cross-platform-sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  facet_wrap(~classifier, nrow = 3) + 
+  coord_cartesian(ylim = c(0.2, 1)) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Cross-platform sampling, TS 1, VS 2 , raw samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Platform_raw_DS1_2.pdf", height = 4, width = 6)
+
+```
+
+
+## Cross-platform sampling, TS Dataset 1, VS Dataset 2, ranked samples
+
+```{r}
+
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == "1_2" & 
+                result$samples == "rank" &
+                result$setting == "cross-platform-sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.2, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Cross-platform sampling, TS 1, VS 2 , ranked samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Platform_rank_DS1_2.pdf", height = 4, width = 6)
+
+```
+
+
+## Cross-platform sampling, TS Dataset 2, VS Dataset 3, raw samples
+
+```{r}
+
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == "2_3" & 
+                result$samples == "raw" &
+                result$setting == "cross-platform-sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.2, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Cross-platform sampling, TS 2, VS 3 , raw samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Platform_raw_DS2_3.pdf", height = 4, width = 6)
+
+```
+
+## Cross-platform sampling, TS Dataset 2, VS Dataset 3, ranked samples
+
+```{r}
+
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == "2_3" & 
+                result$samples == "rank" &
+                result$setting == "cross-platform-sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  facet_wrap(~classifier, nrow = 3) + 
+  coord_cartesian(ylim = c(0.2, 1)) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Cross-platform sampling, TS 2, VS 3 , ranked samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Platform_rank_DS2_3.pdf", height = 4, width = 6)
+
+```
+
+
+## Cross-platform sampling, TS Dataset 1, VS Dataset 3, raw samples
+
+```{r}
+
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == "1_3" & 
+                result$samples == "raw" &
+                result$setting == "cross-platform-sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.2, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Cross-platform sampling, TS 1, VS 3 , raw samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Platform_raw_DS1_3.pdf", height = 4, width = 6)
+
+```
+
+
+
+## Cross-platform sampling, TS Dataset 1, VS Dataset 3, raw samples
+
+```{r}
+
+ggplot(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
+                result$dataset == "1_3" & 
+                result$samples == "rank" &
+                result$setting == "cross-platform-sampling",], 
+       aes(x = size.ts, y = value, color = measure)) + 
+  stat_summary(fun.y = mean, geom = "line") + 
+  stat_summary(fun.data = mean_se, geom = "errorbar") + 
+  coord_cartesian(ylim = c(0.2, 1)) + 
+  facet_wrap(~classifier, nrow = 3) + 
+  theme(strip.background = element_rect(fill = "white"), 
+        panel.background = element_rect(fill = "white", colour = "black")) + 
+  ggtitle("Cross-platform sampling, TS 1, VS 3 , ranked samples")
+#ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Cross-Platform_rank_DS1_3.pdf", height = 4, width = 6)
+
+```
