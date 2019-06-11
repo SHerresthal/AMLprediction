@@ -4,7 +4,7 @@ This repository contains all code necessary to reproduce the figures from the ma
 
 - functions: All functions necessary to run the code
 
-- calculations: R-scripts to reproduce the main results from figures 1-4. We rc
+- calculations: R-scripts to reproduce the main results
 
 - figures: RMD-files and knitted HTMLs with all figures and subfigures. 
 
