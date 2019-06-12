@@ -1,6 +1,6 @@
 ---
 title: "Classifier calculations"
-author: "Stefanie Warnat-Herresthal"
+author: "Stefanie Warnat-Herresthal, Konstantinos Perrakis, Bernd Taschler"
 output: 
   html_document: 
     code_download: yes
@@ -16,11 +16,11 @@ knitr::opts_chunk$set(eval = FALSE)
 ```
 
 
-This script includes all calculations of figures 2 and 4 and S2-S7 and S10-12 of the manuscript *Warnat-Herresthal, Perrakis et al 2019, Scalable diagnosis of acute myeloid leukemia using high-dimensional machine learning and blood transcriptomics* . 
+This script includes all main predictive calculations of figures 2 and 4 and S2-S7 and S10-12 of the manuscript *Warnat-Herresthal, Perrakis et al 2019, Scalable diagnosis of acute myeloid leukemia using high-dimensional machine learning and blood transcriptomics* . 
 
 To run the script, we recommend to use our docker container in schultzelab/AML_classifier:0.0.1
 
-The first part of the script calculates the prediction, the second parts summarized the results and returns the file *results_summary.txt* as output. This file is also provided on github. 
+The first part of the script calculates the prediction, the second parts summarizes the results and returns the file *results_summary.txt* as output. This file is also provided on github. 
 
 # Prerequisites
 ## Loading packages
@@ -43,10 +43,12 @@ library("limma")
 
 ## Loading functions 
 ```{r}
-source("../functions/classify.R")
+source("functions.R")
 ```
 
 ## Loading data
+You can find the data in the docker container under `/data/Datasets.RData`
+
 ```{r}
 load("../data/Datasets.RData")
 ```
@@ -439,6 +441,7 @@ for(ntrain in c(100, 250, 500, 1000, 1500, 2000, 4000)){
 }
 ```
 
+
 # Fig 2.F Cross-study Sampling Dataset 3, all samples
 ```{r}
 info.3.num <- info.3
@@ -504,6 +507,9 @@ for(ntrain in c(100, 250, 500, 1000)){
                            dir = paste(dir, "Crossstudy/Dataset_3/all", sep = ""))
 }
 ```
+
+# Fig. 3 PPV
+The calculations for this part are included in the script "figures". 
 
 # Fig. 4 Cross-Platform Sampling
 ## raw (normalized) data
@@ -697,10 +703,8 @@ permute_ts_vs_crossplatform(nperm = 1,
 ```
 
 
-
 # Summarize the results
-
-This part of the script is used to summarize all results in one table *after* the calculations are done. 
+This part of the script is used to summarize all main prediction results for figures 2 and 4 in one table *after* the calculations are done. 
 
 # Loading Data
 ## 1. Random Sampling

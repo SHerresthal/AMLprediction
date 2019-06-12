@@ -1,0 +1,21 @@
+install.packages("devtools")
+library(devtools)
+
+install_version("ggplot2", version = "0.9.1", repos = "http://cran.us.r-project.org")
+install_version("data.table", version = "1.12.0", repos = "http://cran.us.r-project.org")
+install_version("class", version = "7.3-14", repos = "http://cran.us.r-project.org")
+install_version("e1071", version = "1.7-0.1", repos = "http://cran.us.r-project.org")
+install_version("ROCR", version = "1.0-7", repos = "http://cran.us.r-project.org")
+install_version("pamr", version = "1.56.1", repos = "http://cran.us.r-project.org")
+install_version("MASS", version = "7.3-51.1", repos = "http://cran.us.r-project.org")
+install_version("randomForest", version = "4.6-12", repos = "http://cran.us.r-project.org")
+install_version("glmnet", version = "2.0-16", repos = "http://cran.us.r-project.org")
+install_version("foreach", version = "1.4.4", repos = "http://cran.us.r-project.org")
+install_version("doParallel", version = "1.0.11", repos = "http://cran.us.r-project.org")
+install_version("dplyr", version = "0.8.0.1", repos = "http://cran.us.r-project.org")
+install_version("pamr", version = "1.56", repos = "http://cran.us.r-project.org")
+
+source("https://bioconductor.org/biocLite.R")
+biocLite(c("multtest", "affy", "limma"))
+
+devtools::install_github("rstudio/keras", upgrade = "never")

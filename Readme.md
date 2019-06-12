@@ -1,12 +1,14 @@
 # Scalable diagnosis of acute myeloid leukemia using high-dimensional machine learning and blood transcriptomics
 
-This repository contains all code necessary to reproduce the figures from the manuscript by Warnat-Herresthal et. al 2019. 
+This repository contains the code necessary to reproduce the main figures from the manuscript by Warnat-Herresthal et. al 2019. 
 
-- functions: All functions necessary to run the code
+You can also run the code in the docker-container https://hub.docker.com/r/schultzelab/aml_classifier, which provides the data and all packages necessary to reproduce the calculations. For resproducing the figures, we provide our main results in the folder `results`. 
 
-- calculations: R-scripts to reproduce the main results from figures 1-4. We rc
+The folders contain the following scripts: 
 
-- figures: RMD-files and knitted HTMLs with all figures and subfigures. 
+- calculations: R-scripts to reproduce the main prediction results. 
+- figures: RMD-files and knitted HTMLs with figures and subfigures. 
+- results: output directory for the calculation scripts and our precalculated results to reproduce the figures.
+- docker: The dockerfile for https://hub.docker.com/r/schultzelab/aml_classifier
 
-
-You can also run the code in the follwing docker-container, which provides all packages necessary to reproduce the figure. 
+The scripts were written by Stefanie Warnat-Herresthal, Konstaninos Perrakis and Bernd Taschler. 

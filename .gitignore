@@ -6,3 +6,7 @@
 /results/Randomsampling/
 /results/Crossstudy/
 /results/Crossplatform/
+.Rproj
+/docker/data/
+/calculations/example_docker.R
+/figures/Figures_files/

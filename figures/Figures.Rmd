@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(ggplot2)
+library(tidyr)
 ```
 
 Loading data
@@ -26,7 +27,8 @@ result <- read.delim("../results/results_summary.txt", sep = "\t")
 
 
 # Main figures
-## Figure 2 B: Dataset 1, all samples
+## Figure 2: Random and Cross-study sampling
+### 2 B: Dataset 1, all samples
 Random Sampling vs. Cross-study sampling
 ```{r}
 dat <- result[result$measure %in% c("ACC", "SENS", "SPEC") & 
@@ -63,7 +65,7 @@ ggplot(dat[dat$measure %in% c("ACC") &
 
 ```
 
-## Figure 2 C: Dataset 1, leukemia samples
+### 2 C: Dataset 1, leukemia samples
 Random Sampling vs. Cross-study sampling
 ```{r}
 
@@ -101,7 +103,7 @@ ggplot(dat[dat$measure %in% c("ACC") &
 #ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Fig2C.pdf", height = 4, width = 6)
 
 ```
-## Figure 2 D: Dataset 2, all samples
+### 2 D: Dataset 2, all samples
 Random Sampling vs. Cross-study sampling
 ```{r}
 
@@ -140,7 +142,7 @@ ggplot(dat[dat$measure %in% c("ACC") &
 
 ```
 
-## Figure 2 E: Dataset 2, leukemia samples
+### 2 E: Dataset 2, leukemia samples
 Random Sampling vs. Cross-study sampling
 ```{r}
 
@@ -179,7 +181,7 @@ ggplot(dat[dat$measure %in% c("ACC") &
 #ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Fig2E.pdf", height = 4, width = 6)
 
 ```
-## Figure 2 F: Dataset 3, all samples
+### 2 F: Dataset 3, all samples
 Random Sampling vs. Cross-study sampling
 ```{r}
 mean(result[result$measure %in% c("ACC", "SENS", "SPEC") & 
@@ -219,9 +221,36 @@ ggplot(dat[dat$measure %in% c("ACC") &
 
 ## Figure 3: PPV
 
+positive predictive value for different prediction scenarios
+```{r}
+prev <- c(0.05, 0.01, 0.001)
+ntrain <- c(100, 250, 500, 3000, 6679)
+res <- data.frame()
+for(i in 1:length(ntrain)){
+  for(j in 1:length(prev)){
+    
+    tmp_sens <- result[c(result$classifier == "LASSO" &  result$size.ts == ntrain[i] & result$dataset == 2 &  result$setting == "random_sampling" &  result$measure == "SENS" & result$samples == "all"),]$value
+    
+    tmp_spec <- result[c(result$classifier == "LASSO" &  result$size.ts == ntrain[i] & result$dataset == 2 &  result$setting == "random_sampling" &  result$measure == "SPEC" & result$samples == "all"),]$value
+    
+    tmp_ppv <- (tmp_sens * prev[j]) / ( tmp_spec * prev[j] + (1-tmp_spec) * (1-prev[j])  )  
+    
+    tmp <- data.frame(prevalence = prev[j],
+                      ntrain = ntrain[i], 
+                      ppv = tmp_ppv)
+    res <- rbind(res, tmp)
+    
+    
+  }
+}
 
+ggplot(res, aes(x = factor(ntrain), y = ppv, group = prevalence)) + 
+  stat_summary(fun.y = mean, geom = "line", aes(colour = prevalence)) + 
+  stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.3) +
+  theme_bw()
+```
 
-## Figure 4
+## Figure 4: Cross-study prediction
 ```{r}
 ggplot(result[result$measure %in% c("ACC") & 
               result$classifier == "LASSO" & 
@@ -230,12 +259,10 @@ ggplot(result[result$measure %in% c("ACC") &
   stat_summary(fun.y = mean, geom = "line") + 
   stat_summary(fun.data = mean_se, geom = "errorbar") + 
   coord_cartesian(ylim = c(0.5, 1)) + 
-  facet_grid(dataset~samples) + 
+  facet_wrap(dataset~samples, scales = "free") + 
   theme(strip.background = element_rect(fill = "white"), 
         panel.background = element_rect(fill = "white", colour = "black")) + 
-  ggtitle("Figure 2 F, DS3, all samples")
-# ggsave("E:/Stefanie/Classifier/Paper/Plots_all_calculations/Fig2F.pdf", height = 4, width = 6)
-
+  ggtitle("Figure 4, all prediction scenarios")
 ```
 
 # Supplementary Figures 
